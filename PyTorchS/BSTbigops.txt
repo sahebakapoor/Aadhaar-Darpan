@@ -1,0 +1,154 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node *left, *right;
+};
+
+// Create node
+struct node* createNode(int value) {
+    struct node* n = (struct node*)malloc(sizeof(struct node));
+    n->data = value;
+    n->left = n->right = NULL;
+    return n;
+}
+
+// Insert (BST)
+struct node* insert(struct node* root, int value) {
+    if(root == NULL) return createNode(value);
+    if(value < root->data) root->left = insert(root->left, value);
+    else root->right = insert(root->right, value);
+    return root;
+}
+
+// a) Total nodes
+int countNodes(struct node* root) {
+    if(root == NULL) return 0;
+    return 1 + countNodes(root->left) + countNodes(root->right);
+}
+
+// b) Leaf nodes
+int countLeaf(struct node* root) {
+    if(root == NULL) return 0;
+    if(root->left == NULL && root->right == NULL) return 1;
+    return countLeaf(root->left) + countLeaf(root->right);
+}
+
+// c) Non-leaf nodes
+int countNonLeaf(struct node* root) {
+    if(root == NULL || (root->left == NULL && root->right == NULL)) return 0;
+    return 1 + countNonLeaf(root->left) + countNonLeaf(root->right);
+}
+
+// d) Smallest (min)
+int findMin(struct node* root) {
+    if(root == NULL) return -1;
+    while(root->left != NULL) root = root->left;
+    return root->data;
+}
+
+// e) Largest (max)
+int findMax(struct node* root) {
+    if(root == NULL) return -1;
+    while(root->right != NULL) root = root->right;
+    return root->data;
+}
+
+// f) Search
+int search(struct node* root, int key) {
+    if(root == NULL) return 0;
+    if(root->data == key) return 1;
+    if(key < root->data) return search(root->left, key);
+    else return search(root->right, key);
+}
+
+// g) Sum of all nodes
+int sumNodes(struct node* root) {
+    if(root == NULL) return 0;
+    return root->data + sumNodes(root->left) + sumNodes(root->right);
+}
+
+// h) Ascending order (Inorder)
+void inorder(struct node* root) {
+    if(root != NULL) {
+        inorder(root->left);
+        printf("%d ", root->data);
+        inorder(root->right);
+    }
+}
+
+int main() {
+    struct node* root = NULL;
+    int choice, value;
+
+    while(1) {
+        printf("\n--- BST OPERATIONS MENU ---\n");
+        printf("1. Insert\n");
+        printf("2. Total Nodes\n");
+        printf("3. Leaf Nodes\n");
+        printf("4. Non-Leaf Nodes\n");
+        printf("5. Smallest Element\n");
+        printf("6. Largest Element\n");
+        printf("7. Search Element\n");
+        printf("8. Sum of Nodes\n");
+        printf("9. Display (Ascending)\n");
+        printf("10. Exit\n");
+
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch(choice) {
+            case 1:
+                printf("Enter value: ");
+                scanf("%d", &value);
+                root = insert(root, value);
+                break;
+
+            case 2:
+                printf("Total nodes = %d\n", countNodes(root));
+                break;
+
+            case 3:
+                printf("Leaf nodes = %d\n", countLeaf(root));
+                break;
+
+            case 4:
+                printf("Non-leaf nodes = %d\n", countNonLeaf(root));
+                break;
+
+            case 5:
+                printf("Smallest = %d\n", findMin(root));
+                break;
+
+            case 6:
+                printf("Largest = %d\n", findMax(root));
+                break;
+
+            case 7:
+                printf("Enter value to search: ");
+                scanf("%d", &value);
+                if(search(root, value))
+                    printf("Element found\n");
+                else
+                    printf("Element not found\n");
+                break;
+
+            case 8:
+                printf("Sum of nodes = %d\n", sumNodes(root));
+                break;
+
+            case 9:
+                printf("Ascending order: ");
+                inorder(root);
+                printf("\n");
+                break;
+
+            case 10:
+                return 0;
+
+            default:
+                printf("Invalid choice\n");
+        }
+    }
+}

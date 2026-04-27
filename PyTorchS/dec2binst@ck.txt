@@ -1,0 +1,38 @@
+#include <stdio.h>
+
+#define MAX 100
+
+int stack[MAX];
+int top = -1;
+
+// Push
+void push(int val) {
+    stack[++top] = val;
+}
+
+// Pop
+int pop() {
+    return stack[top--];
+}
+
+int main() {
+    int num;
+
+    printf("Enter a decimal number: ");
+    scanf("%d", &num);
+
+    int temp = num;
+
+    // Convert to binary (store remainders)
+    while(temp > 0) {
+        push(temp % 2);
+        temp = temp / 2;
+    }
+
+    printf("Binary equivalent: ");
+    while(top != -1) {
+        printf("%d", pop());
+    }
+
+    return 0;
+}

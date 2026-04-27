@@ -1,0 +1,164 @@
+#include <stdio.h>
+
+#define MAX 20
+
+int adj[MAX][MAX];
+int n = 0;  // number of vertices
+
+// g) Insert Vertex
+void insertVertex() {
+    if(n == MAX) {
+        printf("Max vertices reached\n");
+        return;
+    }
+
+    for(int i = 0; i <= n; i++) {
+        adj[i][n] = 0;
+        adj[n][i] = 0;
+    }
+
+    n++;
+    printf("Vertex inserted. Total vertices = %d\n", n);
+}
+
+// h) Insert Edge
+void insertEdge(int u, int v) {
+    if(u >= n || v >= n) {
+        printf("Invalid vertices\n");
+        return;
+    }
+
+    adj[u][v] = 1;
+    adj[v][u] = 1; // undirected graph
+
+    printf("Edge inserted between %d and %d\n", u, v);
+}
+
+// j) Delete Edge
+void deleteEdge(int u, int v) {
+    if(u >= n || v >= n) {
+        printf("Invalid vertices\n");
+        return;
+    }
+
+    adj[u][v] = 0;
+    adj[v][u] = 0;
+
+    printf("Edge deleted between %d and %d\n", u, v);
+}
+
+// i) Delete Vertex
+void deleteVertex(int v) {
+    if(v >= n) {
+        printf("Invalid vertex\n");
+        return;
+    }
+
+    for(int i = v; i < n - 1; i++) {
+        for(int j = 0; j < n; j++) {
+            adj[i][j] = adj[i + 1][j];
+        }
+    }
+
+    for(int j = v; j < n - 1; j++) {
+        for(int i = 0; i < n - 1; i++) {
+            adj[i][j] = adj[i][j + 1];
+        }
+    }
+
+    n--;
+    printf("Vertex %d deleted\n", v);
+}
+
+// k) Degree of each vertex
+void degree() {
+    for(int i = 0; i < n; i++) {
+        int deg = 0;
+        for(int j = 0; j < n; j++) {
+            deg += adj[i][j];
+        }
+        printf("Degree of vertex %d = %d\n", i, deg);
+    }
+}
+
+// l) Count self-loops
+void selfLoops() {
+    int count = 0;
+    for(int i = 0; i < n; i++) {
+        if(adj[i][i] == 1)
+            count++;
+    }
+    printf("Number of self-loops = %d\n", count);
+}
+
+// Display matrix (extra helpful)
+void display() {
+    printf("\nAdjacency Matrix:\n");
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < n; j++) {
+            printf("%d ", adj[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int choice, u, v;
+
+    while(1) {
+        printf("\n--- GRAPH MENU ---\n");
+        printf("1. Insert Vertex\n");
+        printf("2. Insert Edge\n");
+        printf("3. Delete Vertex\n");
+        printf("4. Delete Edge\n");
+        printf("5. Degree of each vertex\n");
+        printf("6. Count self-loops\n");
+        printf("7. Display Matrix\n");
+        printf("8. Exit\n");
+
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch(choice) {
+            case 1:
+                insertVertex();
+                break;
+
+            case 2:
+                printf("Enter vertices (u v): ");
+                scanf("%d %d", &u, &v);
+                insertEdge(u, v);
+                break;
+
+            case 3:
+                printf("Enter vertex to delete: ");
+                scanf("%d", &v);
+                deleteVertex(v);
+                break;
+
+            case 4:
+                printf("Enter edge (u v): ");
+                scanf("%d %d", &u, &v);
+                deleteEdge(u, v);
+                break;
+
+            case 5:
+                degree();
+                break;
+
+            case 6:
+                selfLoops();
+                break;
+
+            case 7:
+                display();
+                break;
+
+            case 8:
+                return 0;
+
+            default:
+                printf("Invalid choice\n");
+        }
+    }
+}

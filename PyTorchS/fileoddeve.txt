@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main() {
+    int n, num;
+
+    FILE *all, *odd, *even;
+
+    printf("Enter number of integers: ");
+    scanf("%d", &n);
+
+    all = fopen("All.txt", "w");
+    odd = fopen("Odd.txt", "w");
+    even = fopen("Even.txt", "w");
+
+    srand(time(0));
+
+    // Generate and store in All.txt
+    for(int i = 0; i < n; i++) {
+        num = rand() % 100; // random 0–99
+        fprintf(all, "%d ", num);
+    }
+
+    fclose(all);
+
+    // Read from All.txt and split
+    all = fopen("All.txt", "r");
+
+    while(fscanf(all, "%d", &num) != EOF) {
+        if(num % 2 == 0)
+            fprintf(even, "%d ", num);
+        else
+            fprintf(odd, "%d ", num);
+    }
+
+    fclose(all);
+    fclose(odd);
+    fclose(even);
+
+    // Display contents
+    char ch;
+
+    printf("\nAll.txt:\n");
+    all = fopen("All.txt", "r");
+    while((ch = fgetc(all)) != EOF)
+        printf("%c", ch);
+    fclose(all);
+
+    printf("\n\nOdd.txt:\n");
+    odd = fopen("Odd.txt", "r");
+    while((ch = fgetc(odd)) != EOF)
+        printf("%c", ch);
+    fclose(odd);
+
+    printf("\n\nEven.txt:\n");
+    even = fopen("Even.txt", "r");
+    while((ch = fgetc(even)) != EOF)
+        printf("%c", ch);
+    fclose(even);
+
+    return 0;
+}
